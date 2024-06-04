@@ -76,8 +76,8 @@ vim.opt.hlsearch = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
+vim.keymap.set('n', '<leader><left>', vim.diagnostic.goto_prev, { desc = 'Go to previous Diagnostic message' })
+vim.keymap.set('n', '<leader><right>', vim.diagnostic.goto_next, { desc = 'Go to next Diagnostic message' })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
@@ -90,10 +90,14 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- TIP: Disable arrow keys in normal mode
--- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
--- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
--- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
--- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
+vim.keymap.set('n', '<left>', '0')
+vim.keymap.set('n', '<right>', '$')
+vim.keymap.set('n', '<up>', '{')
+vim.keymap.set('n', '<down>', '}')
+
+-- Move lines up and down
+vim.keymap.set('n', '<A-k>', ':m .-2<CR>==')
+vim.keymap.set('n', '<A-j>', ':m .+1<CR>==')
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
@@ -146,21 +150,22 @@ require('lazy').setup({
     'Exafunction/codeium.vim',
 
     -- NOTE: codeium plugin key bindings
-    --
+    --set statusline+=%\{...\}%3{codeium#GetStatusString()}
     config = function()
       -- Change '<C-g>' here to any keycode you like.
-      vim.keymap.set('i', '<C-y>', function()
+      vim.keymap.set('i', '<A-l>', function()
         return vim.fn['codeium#Accept']()
       end, { expr = true, silent = true })
-      vim.keymap.set('i', '<C-n>', function()
+      vim.keymap.set('i', '<A-j>', function()
         return vim.fn['codeium#CycleCompletions'](1)
       end, { expr = true, silent = true })
-      vim.keymap.set('i', '<C-p>', function()
+      vim.keymap.set('i', '<A-k>', function()
         return vim.fn['codeium#CycleCompletions'](-1)
       end, { expr = true, silent = true })
-      vim.keymap.set('i', '<C-x>', function()
+      vim.keymap.set('i', '<A-h>', function()
         return vim.fn['codeium#Clear']()
       end, { expr = true, silent = true })
+      --vim.keymap.del('i', '<tab>')
     end,
   },
 
@@ -335,6 +340,11 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
+
+      -- Shortcut for searching your Projects
+      vim.keymap.set('n', '<leader>sp', function()
+        builtin.find_files { cwd = '~/Projects' }
+      end, { desc = '[S]earch [P]rojects files' })
     end,
   },
 
@@ -776,7 +786,7 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  -- require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
 
