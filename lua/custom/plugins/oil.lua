@@ -10,7 +10,7 @@ return {
         show_hidden = true,
       },
     }
-    vim.keymap.set('n', '<leader>o', require('oil').open, { desc = 'Open parent directory' })
-    vim.keymap.set('n', '-', require('oil').open_float, { desc = 'Open parent directory in float' })
+    vim.keymap.set('n', '-', require('oil').open, { desc = 'Open parent directory' })
+    vim.keymap.set('n', '<leader>o', require('oil').open_float, { desc = 'Open parent directory in float' })
   end,
 }
